@@ -13,8 +13,6 @@ function MainPage(props) {
     let navigate = useNavigate()
     const [city, setCity] = useState()
     let [favorite, setFavorite] = useState([])
-
-
     useEffect(() => {
         if (lattitude && longitude) {
             const url = `${BASE_URL}?lat=${lattitude}&lon=${longitude}&units=metric&${API_key}`
@@ -37,14 +35,12 @@ function MainPage(props) {
         getCity()
 
     }, []);
-
     function handleDelete(city) {
         axios
             .delete(`${server_URL}/${city}`)
             .then(() => {
                 getCity()
             })
-
     }
     function handleFav(city) {
         axios
@@ -73,21 +69,15 @@ function MainPage(props) {
                         </span>
                     })}
                 </div>
-
             </div>
             {city && <div id='weather-container'>
-
-
                 <div id='name-container'>
                     <div>
                     <h1>{city.name}<RiTempHotLine /></h1>
                     <h1 id='temp'>{city.main.temp.toFixed()}°C</h1>
                     </div>
                     <div id='date-time'>  {datetime}</div>
-
                 </div>
-              
-
                 <div id='weather-subcontainer'>
                     <p>Whether <b>{city.weather[0].main}</b></p>
                     <p>Minimum temperature <b><FcDown/>{city.main.temp_min.toFixed()}°C</b></p>
@@ -96,7 +86,6 @@ function MainPage(props) {
                     <p>Humidity <b><WiHumidity/>{city.main.humidity} %</b></p>
                     <p>Wind speed <b><GiWindSlap/>{city.wind.speed} km/h</b></p>
                 </div>
-
                 <div><button className='btn' onClick={() => { navigate(`/forecast/${city.name}`) }}>More Details</button></div>
             </div>}
         </div>

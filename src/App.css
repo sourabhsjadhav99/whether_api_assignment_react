@@ -45,10 +45,14 @@ body{
   box-sizing: border-box;
 
 }
+#loading{
+  text-align: center;
+
+}
 #main-container{
   background-color: white;
   width: 600px;
-  height: 600px;
+  height: 620px;
   border:1px solid lightgray;
   position: absolute;
   top:50%;
@@ -98,7 +102,6 @@ input{
   text-align: center;
   display: inline-block;
   margin: 10px;
- /* width: 90px; */
  height: 30px;
   border-radius: 3px;
   background-color: lightgray;
@@ -135,7 +138,7 @@ input{
 }
 #weather-container{
   background-color: whitesmoke;
-  height: 350px;
+  height: 370px;
   padding: 10px;
   display: flex;
   flex-direction: column;
