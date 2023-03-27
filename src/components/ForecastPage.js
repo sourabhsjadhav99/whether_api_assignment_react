@@ -2,6 +2,11 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import { BASE_URL, API_key } from "../Assets/Service"
+import { RiTempHotLine  } from "react-icons/ri"
+import { GiPressureCooker,GiWindSlap  } from "react-icons/gi"
+import { WiHumidity,} from "react-icons/wi"
+import { FcDown,FcUp} from "react-icons/fc"
+import { BsSunrise,BsSunsetFill} from "react-icons/bs"
 function ForecastPage(props) {
   let { cityName } = useParams()
   console.log(cityName)
@@ -23,41 +28,46 @@ function ForecastPage(props) {
     }
   }, []);
   let currentdate = new Date();
-  let datetime = `Last Sync:${currentdate.getDate()}/${currentdate.getMonth()+1}/${currentdate.getFullYear()} @ ${currentdate.getHours()} hours :${currentdate.getMinutes()} minutes`
+  let datetime = `Last Sync:${currentdate.getDate()}/${currentdate.getMonth() + 1}/${currentdate.getFullYear()} @ ${currentdate.getHours()} hours :${currentdate.getMinutes()} minutes`
   return (
-    <div>
+    <div id='main-container-forecast'>
+      <h1>Weather App</h1>
+      {city && <div id='weather-container'>
 
-      {city && <div>
-        <div>
-          <h1>{city.name}</h1>
-          <div><button onClick={() => { navigate(-1) }}>Back</button></div>
-          <h1>{city.main.temp.toFixed()}°C</h1>
-          <p>{datetime}</p>
-          <p>Whether {city.weather[0].main}</p>
-          <p>Whether {city.weather[0].description}</p>
+        <div id='name-container'>
+          <div>
+            <h1>{city.name} <RiTempHotLine /></h1>
+            <h1 id='temp'>{city.main.temp.toFixed()}°C</h1>
+          </div>
+          <div id='date-time'>  {datetime}</div>
+
         </div>
-        <div>
-          <p>Sunrise {city.sys.sunrise}</p>
-          <p>Sunset {city.sys.sunset}</p>
+
+        <div id='weather-subcontainer'>
+          <p>Whether <b>{city.weather[0].main}</b></p>
+          <p>Whether <b>{city.weather[0].main}</b></p>
+          <p>Whether description<b>{city.weather[0].description}</b></p>
+          <p>Minimum temperature <b><FcDown/>{city.main.temp_min.toFixed()}°C</b></p>
+          <p>maximum temperature <b><FcUp/>{city.main.temp_max.toFixed()}°C</b></p>
+          <p>Feels like<b>{city.main.feels_like.toFixed()}°C</b></p>
+          <p>Pressure <b><GiPressureCooker/>{city.main.pressure} mb</b></p>
+          <p>Humidity <b><WiHumidity/>{city.main.humidity} %</b></p>
+          <p>Wind speed <b><GiWindSlap/>{city.wind.speed} km/h</b></p>
+          <p>Sunrise <b><BsSunrise/>{city.sys.sunrise}</b></p>
+          <p>Sunset <b><BsSunsetFill/>{city.sys.sunset}</b></p>
+          <p>Latitide <b>{city.coord.lat}°</b></p>
+          <p>Longitude <b>{city.coord.lon}°</b></p>
+          <p>Ground Level <b>{city.main.grnd_level} millibar</b></p>
+          <p>Sea Level <b>{city.main.sea_level} millibar</b></p>
         </div>
-        <div>
-          <p>Minimum temperature {city.main.temp_min.toFixed()}°C</p>
-          <p>maximum temperature {city.main.temp_max.toFixed()}°C</p>
-        </div>
-        <div>
-          <p>Ground Level {city.main.grnd_level} millibar</p>
-          <p>Sea Level {city.main.sea_level} millibar</p>
-        </div>
-        <div>
-          <p>Pressure {city.main.pressure} Pascal</p>
-          <p>Humidity {city.main.humidity} Pascal</p>
-          <p>Wind speed {city.wind.speed} km/h</p>
-        </div>
-        <div>
-          <p>Latitide {city.coord.lat}°</p>
-          <p>Longitude {city.coord.lon}°</p>
+
+        <div id='fav-det-btns'>
+          <button id='back-btn' onClick={() => { navigate(-1) }}>Back</button>
         </div>
       </div>}
+
+
+
     </div>
   )
 }

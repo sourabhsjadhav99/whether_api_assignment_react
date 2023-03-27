@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
-import "./SearchPage.modules.css"
 import { useNavigate } from 'react-router-dom'
-import {BASE_URL,API_key, server_URL} from "../Assets/Service"
-
+import { BASE_URL, API_key, server_URL } from "../Assets/Service"
+import { RiTempHotLine  } from "react-icons/ri"
+import { GiPressureCooker,GiWindSlap  } from "react-icons/gi"
+import { WiHumidity } from "react-icons/wi"
+import { FcDown,FcUp} from "react-icons/fc"
 function SearchPage() {
   const [search, setSearch] = useState()
   const [city, setCity] = useState(null)
@@ -35,49 +37,59 @@ function SearchPage() {
   let handleFavorite = (city) => {
     axios.post(`${server_URL}`, {
       city: city,
-    }).then(()=>{
+    }).then(() => {
       alert("Added in favorite city list")
+    }).catch((error)=>{
+      if(error.message=="Request failed with status code 404"){
+        alert("Already in favorite list")
+      }
     })
   }
 
-
+  let currentdate = new Date();
+  let datetime = `Last Sync:${currentdate.getDate()}/${currentdate.getMonth() + 1}/${currentdate.getFullYear()} @ ${currentdate.getHours()} hours :${currentdate.getMinutes()} minutes`
 
 
   return (
     <div id='main-container'>
-      <div className="search">
+      <h1>Weather App</h1>
+      <div id="input-container">
+     
         <input
           value={search}
           onChange={event => setSearch(event.target.value)}
-          placeholder='Search cityname...'
+          placeholder='Search Cityname...'
           type="text" />
-        <button onClick={() => { handleClick(search) }}>search</button>
-        <button onClick={() => { navigate(-1) }}>Back</button>
+
+        <div id='search-back-btn'>
+          <button className='btn' onClick={() => { handleClick(search) }}>search</button>
+          <button className='btn' onClick={() => { navigate(-1) }}>Back</button>
+        </div>
       </div>
-      {
-        !city ? <h2>No data</h2> :
+      {city && <div id='weather-container'>
+
+        <div id='name-container'>
           <div>
-            <div><button id='fav-button' onClick={() => { handleFavorite(city.name) }}>favorite</button></div>
-            <div>
-              <h1>{city.name}</h1>
-              <div><button onClick={() => { navigate(`/forecast/${city.name}`) }}>Details</button></div>
-              <h1>{city.main.temp.toFixed()}°C</h1>
-              <p>Whether {city.weather[0].main}</p>
-        
-            </div>
-
-            <div>
-              <p>Minimum temperature {city.main.temp_min.toFixed()}°C</p>
-              <p>maximum temperature {city.main.temp_max.toFixed()}°C</p>
-            </div>
-            <div>
-              <p>Pressure {city.main.pressure} Pascal </p>
-              <p>Humidity {city.main.humidity} Pascal</p>
-              <p>Wind speed {city.wind.speed} m/s</p>
-            </div>
-
+            <h1>{city.name}<RiTempHotLine /></h1>
+            <h1 id='temp'>{city.main.temp.toFixed()}°C</h1>
           </div>
-      }
+          <div id='date-time'>  {datetime}</div>
+
+        </div>
+        <div id='weather-subcontainer'>
+          <p>Whether <b>{city.weather[0].main}</b></p>
+          <p>Minimum temperature <b><FcDown/>{city.main.temp_min.toFixed()}°C</b></p>
+          <p>maximum temperature <b><FcUp/>{city.main.temp_max.toFixed()}°C</b></p>
+          <p>Pressure <b><GiPressureCooker/>{city.main.pressure} mb</b></p>
+          <p>Humidity <b><WiHumidity/>{city.main.humidity} %</b></p>
+          <p>Wind speed <b><GiWindSlap/>{city.wind.speed} km/h</b></p>
+        </div>
+
+        <div id='fav-det-btns'>
+          <button className='fav-det-btn' onClick={() => { navigate(`/forecast/${city.name}`) }}>More Details</button>
+          <button className='fav-det-btn' onClick={() => { handleFavorite(city.name) }}> Favorite</button>
+        </div>
+      </div>}
 
 
     </div>
